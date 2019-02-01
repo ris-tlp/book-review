@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template, request, redirect, url_for,
+from flask import Flask, session, render_template, request, redirect, url_for
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -23,8 +23,19 @@ db = scoped_session(sessionmaker(bind=engine))
 
 
 @app.route("/")
-def home():
-    return render_template("index.html")
+def index():
+    # Setting login state (True if logged in) (False if logged out)
+    if session.get("login_state") is None:
+        session["login_state"] = False
+
+    # Checking if logged in
+    if session["login_state"] == False:
+        print("You are not logged in")
+        return redirect(url_for('login'))
+    else:
+        return render_template(index.html)
+
+
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -51,9 +62,17 @@ def login():
 
         for user in users:
             if request.form['username'] == user.username and request.form['password'] == user.password:
-                return redirect(url_for('home'))
+                session['login_state'] = True
+                print("You are now logged in")
+                return redirect(url_for('index'))
+
                 break
             else:
                 error = 'Invalid Credentials. Please try again.'
 
     return render_template('login.html', error=error)
+
+@app.route('/logout')
+def logout():
+    session["login_state"] = False
+    return redirect(url_for('index'))
