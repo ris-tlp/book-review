@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block title %} Sign in {% endblock %}
+
+{% block body %}
+
+<a href="{{ url_for('login')}}">Sign in! </a>
+<br>
+<a href="{{ url_for('signup') }}">Sign up!</a>
+
+{% endblock %}
