@@ -30,10 +30,10 @@ def index():
 
     # Checking if logged in
     if session["login_state"] == False:
-        print("You are not logged in")
+        # print("You are not logged in")
         return redirect(url_for('login'))
     else:
-        return render_template(index.html)
+        return render_template("index.html")
 
 
 
@@ -63,7 +63,7 @@ def login():
         for user in users:
             if request.form['username'] == user.username and request.form['password'] == user.password:
                 session['login_state'] = True
-                print("You are now logged in")
+                # print("You are now logged in")
                 return redirect(url_for('index'))
 
                 break
