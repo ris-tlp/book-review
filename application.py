@@ -1,5 +1,4 @@
 import os
-
 from flask import Flask, session, render_template, request, redirect, url_for
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -33,7 +32,7 @@ def index():
         # print("You are not logged in")
         return redirect(url_for('login'))
     else:
-        return render_template("index.html")
+        return redirect(url_for('search'))
 
 
 
@@ -65,8 +64,8 @@ def login():
                 session['login_state'] = True
                 # print("You are now logged in")
                 return redirect(url_for('index'))
-
                 break
+
             else:
                 error = 'Invalid Credentials. Please try again.'
 
@@ -76,3 +75,19 @@ def login():
 def logout():
     session["login_state"] = False
     return redirect(url_for('index'))
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    error = None
+    if request.method == 'POST':
+        searchInput = request.form['search']
+
+        search = db.execute("SELECT * FROM BOOKS WHERE bsn_id LIKE '%{}%' OR author LIKE '%{}%' OR title LIKE '%{}%'".format(searchInput, searchInput, searchInput))
+        db.commit()
+
+        for result in search:
+            print(result.bsn_id)
+            print(result.author)
+            print(result.title)
+
+    return render_template("search.html")
