@@ -29,10 +29,9 @@ def index():
 
     # Checking if logged in
     if session["login_state"]:
-        # print("You are not logged in")
-        return redirect(url_for('login'))
-    else:
         return redirect(url_for('search'))
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -68,7 +67,6 @@ def login():
             if request.form['username'] == user.username and request.form['password'] == user.password:
                 session['login_state'] = True
                 return redirect(url_for('index'))
-                break
 
             else:
                 error = 'Invalid Credentials. Please try again.'
