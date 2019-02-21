@@ -28,30 +28,35 @@ def index():
         session["login_state"] = False
 
     # Checking if logged in
-    if session["login_state"] == False:
+    if session["login_state"]:
         # print("You are not logged in")
         return redirect(url_for('login'))
     else:
         return redirect(url_for('search'))
 
 
-
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
     error = None
+    flag = True
+
     if request.method == 'POST':
         users = db.execute("SELECT * FROM users").fetchall()
 
         for user in users:
             if request.form['username'] == user.username:
                 error = "This username already exists. Please choose another one!"
+                flag = False
                 break
-            else:
-                db.execute("INSERT INTO USERS (username, password) VALUES (:username, :password)",
-                {"username": request.form['username'], "password": request.form['password']} )
-                db.commit()
+
+        if flag:
+            db.execute("INSERT INTO USERS (username, password) VALUES (:username, :password)",
+                        { "username": request.form['username'], "password": request.form['password'] })
+            db.commit()
+            return redirect(url_for('login'))
 
     return render_template("signup.html", error=error)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -62,7 +67,6 @@ def login():
         for user in users:
             if request.form['username'] == user.username and request.form['password'] == user.password:
                 session['login_state'] = True
-                # print("You are now logged in")
                 return redirect(url_for('index'))
                 break
 
@@ -71,10 +75,12 @@ def login():
 
     return render_template('login.html', error=error)
 
+
 @app.route('/logout')
 def logout():
     session["login_state"] = False
     return redirect(url_for('index'))
+
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
