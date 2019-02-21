@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>Flask Intro - login page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+<div class="container">
+
+<table style="width:100%">
+    <tr>
+        <th>ID</th>
+        <th>TITLE</th>
+        <th>AUTHOR</th>
+        <th>YEAR</th>
+    </tr>
+    {% for id, title, author, year in search %}
+    <tr>
+        <td align="center">{{ id }}</td>
+        <td align="center">{{ title }}</td>
+        <td align="center">{{ author }}</td>
+        <td align="center">{{ year }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+</div>
+
+<br> <br> <br>
+<a href="{{ url_for('logout') }}">Log out :( </a>
+</body>
+</html>

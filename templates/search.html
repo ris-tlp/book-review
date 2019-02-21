@@ -18,6 +18,24 @@
 
     <p> Please enter a BSN ID or Name of the Author or Title of the book </p>
 </div>
+{##}
+{#<table>#}
+{#    <tr>#}
+{#        <th>ID</th>#}
+{#        <th>TITLE</th>#}
+{#        <th>AUTHOR</th>#}
+{#        <th>YEAR</th>#}
+{#    </tr>#}
+{#    {% for id, title, author, year in search %}#}
+{#    <tr>#}
+{#        <td>id</td>#}
+{#        <td>title</td>#}
+{#        <td>author</td>#}
+{#        <td>year</td>#}
+{#    </tr>#}
+{#    {% endfor %}#}
+{##}
+{#</table>#}
 
 <a href="{{ url_for('logout') }}">Log out :( </a>
 </body>

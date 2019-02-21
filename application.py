@@ -83,15 +83,13 @@ def logout():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     error = None
+
+    db.commit()
     if request.method == 'POST':
         searchInput = request.form['search']
 
         search = db.execute("SELECT * FROM BOOKS WHERE bsn_id LIKE '%{}%' OR author LIKE '%{}%' OR title LIKE '%{}%'".format(searchInput, searchInput, searchInput))
         db.commit()
-
-        for result in search:
-            print(result.bsn_id)
-            print(result.author)
-            print(result.title)
+        return render_template("searchResults.html", search=search)
 
     return render_template("search.html")
