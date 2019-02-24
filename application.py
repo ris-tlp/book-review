@@ -83,13 +83,18 @@ def logout():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     error = None
+    count = 0
 
     db.commit()
     if request.method == 'POST':
         searchInput = request.form['search']
-
-        search = db.execute("SELECT * FROM BOOKS WHERE bsn_id LIKE '%{}%' OR author LIKE '%{}%' OR title LIKE '%{}%'".format(searchInput, searchInput, searchInput))
+        searchResults = db.execute("SELECT * FROM BOOKS WHERE bsn_id LIKE '%{}%' OR author LIKE '%{}%' OR title LIKE '%{}%'".format(searchInput, searchInput, searchInput))
         db.commit()
-        return render_template("searchResults.html", search=search)
+
+        if searchResults.rowcount == 0:
+            error = "No results found, please try again!"
+            return render_template("search.html", error=error)
+        else:
+            return render_template("searchResults.html", searchResults=searchResults)
 
     return render_template("search.html")

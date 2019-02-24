@@ -7,14 +7,14 @@
 <body>
 <div class="container">
 
-<table style="width:100%">
+<table style="width:100%" border="1px solid black">
     <tr>
         <th>ID</th>
         <th>TITLE</th>
         <th>AUTHOR</th>
         <th>YEAR</th>
     </tr>
-    {% for id, title, author, year in search %}
+    {% for id, title, author, year in searchResults %}
     <tr>
         <td align="center">{{ id }}</td>
         <td align="center">{{ title }}</td>
