@@ -1,0 +1,22 @@
+<html>
+<head>
+    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+<div class="container">
+
+    {% for id, title, author, year in results %}
+    <p> BSN_ID: {{ id }}</p>
+    <p> Title: {{ title }}</p>
+    <p> Author: {{ author }}</p>
+    <p> Year: {{ year }}</p>
+    {% endfor %}
+
+</div>
+
+<br> <br> <br>
+<a href="{{ url_for('logout') }}">Log out</a>
+</body>
+</html>

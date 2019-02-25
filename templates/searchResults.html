@@ -17,7 +17,7 @@
     {% for id, title, author, year in searchResults %}
     <tr>
         <td align="center">{{ id }}</td>
-        <td align="center">{{ title }}</td>
+        <td align="center"><a href="{{ url_for('bookpage', title = title) }}">{{ title }}</a></td>
         <td align="center">{{ author }}</td>
         <td align="center">{{ year }}</td>
     </tr>

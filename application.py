@@ -83,7 +83,6 @@ def logout():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     error = None
-    count = 0
 
     db.commit()
     if request.method == 'POST':
@@ -98,3 +97,10 @@ def search():
             return render_template("searchResults.html", searchResults=searchResults)
 
     return render_template("search.html")
+
+
+@app.route("/<string:title>")
+def bookpage(title):
+    search = db.execute("SELECT * FROM BOOKS WHERE title LIKE '%{}%'".format(title))
+
+    return render_template("bookpage.html", results=search, title=title)
