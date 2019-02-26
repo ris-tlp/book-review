@@ -6,14 +6,14 @@
 </head>
 <body>
 <div class="container">
+    <p> ISBN Number: {{ results[0] }}</p>
+    <p> Author: {{ results[1] }}</p>
+    <p> Title: {{ results[2] }}</p>
+    <p> Year: {{ results[3] }}</p>
 
-    {% for id, title, author, year in results %}
-    <p> BSN_ID: {{ id }}</p>
-    <p> Title: {{ title }}</p>
-    <p> Author: {{ author }}</p>
-    <p> Year: {{ year }}</p>
-    {% endfor %}
-
+    <p> GOODREADS DATA </p>
+    <p> Ratings count: {{ ratings_count }}</p>
+    <p> Average rating: {{ average_rating }}</p>
 </div>
 
 <br> <br> <br>

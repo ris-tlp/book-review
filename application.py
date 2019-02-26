@@ -4,6 +4,7 @@ from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 import requests
+import json
 
 app = Flask(__name__)
 
@@ -102,5 +103,12 @@ def search():
 @app.route("/<string:title>")
 def bookpage(title):
     search = db.execute("SELECT * FROM BOOKS WHERE title LIKE '%{}%'".format(title))
+    information = search.fetchone()
 
-    return render_template("bookpage.html", results=search, title=title)
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "", "isbns": information[0]})
+    response = res.json()
+
+    ratings_count = response['books'][0]['work_ratings_count']
+    average_rating = response['books'][0]['average_rating']
+
+    return render_template("bookpage.html", results=information, title=title, ratings_count=ratings_count, average_rating=average_rating)
