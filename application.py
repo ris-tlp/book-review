@@ -67,6 +67,9 @@ def login():
         for user in users:
             if request.form['username'] == user.username and request.form['password'] == user.password:
                 session['login_state'] = True
+                user_id = db.execute("SELECT id FROM users WHERE username=:username AND password=:password",
+                                     {"username": user.username, "password": user.password}).fetchone()
+                session["user_id"] = user_id
                 return redirect(url_for('index'))
 
             else:
@@ -100,10 +103,20 @@ def search():
     return render_template("search.html")
 
 
-@app.route("/<string:title>")
+@app.route("/<string:title>", methods=['POST','GET'])
 def bookpage(title):
     search = db.execute("SELECT * FROM BOOKS WHERE title LIKE '%{}%'".format(title))
     information = search.fetchone()
+    isbn = information[0]
+    user_id = session.get("user_id")[0]
+
+    if request.method == 'POST':
+        review = request.form["review"]
+        rating = request.form["rating"]
+
+        db.execute("INSERT INTO reviews(user_id, isbn, review, rating) VALUES(:user_id, :isbn, :review, :rating)",
+                   {"user_id": user_id, "isbn": isbn, "review": review, "rating": rating})
+        db.commit()
 
     res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "", "isbns": information[0]})
     response = res.json()

@@ -6,6 +6,7 @@
 </head>
 <body>
 <div class="container">
+
     <p> ISBN Number: {{ results[0] }}</p>
     <p> Author: {{ results[1] }}</p>
     <p> Title: {{ results[2] }}</p>
@@ -14,6 +15,12 @@
     <p> GOODREADS DATA </p>
     <p> Ratings count: {{ ratings_count }}</p>
     <p> Average rating: {{ average_rating }}</p>
+
+    <form action="" method="post">
+        <input type="text" placeholder="Write a review..." name="review" value="{{ request.form.review }}">
+        <input type="text" placeholder="Rate this book" name="rating" value="{{ request.form.rating }}">
+        <input class="btn btn-default" type="submit" value="Submit">
+    </form>
 </div>
 
 <br> <br> <br>
