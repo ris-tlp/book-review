@@ -12,11 +12,3 @@ What I learnt:
 * Implementing raw SQL queries in an actual application using SQLAlchemy.
 * Understanding HTTP methods GET and POST.
 * Using requests to interact with the [GoodReads API](https://www.goodreads.com/api) and accessing JSON objects.
-
-Usage
-======
-
-1. ```python -m pip install -r requirements.txt``` to install necessary packages.
-2. Open cmd and cd to the repo and ```set FLASK_APP=application.py```(for windows) or ```export FLASK_APP=application.py``` for UNIX.
-3. ```set DATABASE_URL=<database_url>``` where database_url is the PostgreSQL database.
-4. ```python -m flask run``` to start the application.
