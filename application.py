@@ -106,22 +106,31 @@ def search():
 @app.route("/<string:title>", methods=['POST','GET'])
 def bookpage(title):
     search = db.execute("SELECT * FROM BOOKS WHERE title LIKE '%{}%'".format(title))
+    db.commit()
     information = search.fetchone()
     isbn = information[0]
+    reviews = db.execute("SELECT * FROM reviews WHERE isbn=:isbn", {"isbn": isbn})
     user_id = session.get("user_id")[0]
+    error = None
 
     if request.method == 'POST':
         review = request.form["review"]
         rating = request.form["rating"]
 
-        db.execute("INSERT INTO reviews(user_id, isbn, review, rating) VALUES(:user_id, :isbn, :review, :rating)",
-                   {"user_id": user_id, "isbn": isbn, "review": review, "rating": rating})
-        db.commit()
+        if db.execute("SELECT * FROM reviews WHERE user_id=:user_id AND isbn=:isbn", {"user_id": user_id, "isbn": isbn}).rowcount > 0:
+            error = "You've already submitted a review!"
 
-    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "", "isbns": information[0]})
+        else:
+            db.execute("INSERT INTO reviews(user_id, isbn, review, rating) VALUES(:user_id, :isbn, :review, :rating)",
+                       {"user_id": user_id, "isbn": isbn, "review": review, "rating": rating})
+            db.commit()
+
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "u0l5xxurm23QrsHe5SQ",
+                                                                                    "isbns": information[0]})
     response = res.json()
 
     ratings_count = response['books'][0]['work_ratings_count']
     average_rating = response['books'][0]['average_rating']
 
-    return render_template("bookpage.html", results=information, title=title, ratings_count=ratings_count, average_rating=average_rating)
+    return render_template("bookpage.html", results=information, title=title, ratings_count=ratings_count,
+                           average_rating=average_rating, reviews=reviews, error=error)
