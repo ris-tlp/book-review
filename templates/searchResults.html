@@ -7,23 +7,23 @@
 <body>
 <div class="container">
 
-<table style="width:100%" border="1px solid black">
-    <tr>
-        <th>ID</th>
-        <th>TITLE</th>
-        <th>AUTHOR</th>
-        <th>YEAR</th>
-    </tr>
-    {% for id, title, author, year in searchResults %}
-    <tr>
-        <td align="center">{{ id }}</td>
-        <td align="center"><a href="{{ url_for('bookpage', title = title) }}">{{ title }}</a></td>
-        <td align="center">{{ author }}</td>
-        <td align="center">{{ year }}</td>
-    </tr>
-    {% endfor %}
+    <table style="width:100%" border="1px solid black">
+        <tr>
+            <th>ID</th>
+            <th>TITLE</th>
+            <th>AUTHOR</th>
+            <th>YEAR</th>
+        </tr>
+        {% for id, title, author, year in searchResults %}
+            <tr>
+                <td align="center">{{ id }}</td>
+                <td align="center"><a href="{{ url_for('bookpage', title = title) }}">{{ title }}</a></td>
+                <td align="center">{{ author }}</td>
+                <td align="center">{{ year }}</td>
+            </tr>
+        {% endfor %}
 
-</table>
+    </table>
 
 </div>
 

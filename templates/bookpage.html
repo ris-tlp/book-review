@@ -18,27 +18,27 @@
 
     <form action="" method="post">
         <p> Enter a review:</p>
-        <input type="text" placeholder="Write a review..." name="review" value="{{ request.form.review }}" style="height:50px" size="50">
+        <input type="text" placeholder="Write a review..." name="review" value="{{ request.form.review }}"
+               style="height:50px" size="50">
         <br> <br>
         <p>Rate from 1-5</p>
         <input type="radio" placeholder="Rate this book" name="rating" value="1"> 1 <br>
         <input type="radio" placeholder="Rate this book" name="rating" value="2"> 2 <br>
         <input type="radio" placeholder="Rate this book" name="rating" value="3"> 3 <br>
         <input type="radio" placeholder="Rate this book" name="rating" value="4"> 4 <br>
-        <input type="radio" placeholder="Rate this book" name="rating" value="5"> 5 <br>
+        <input type="radio" placeholder="Rate this book" name="rating" value="5"> 5 <br> <br>
 
         <input class="btn btn-default" type="submit" value="Submit">
     </form>
+    {% if error %}
+        <p><b>{{ error }}</b></p>
+    {% endif %}
 </div>
 
 <p> Reviews by other readers:</p> <br>
 {% for r in reviews %}
-    <p> <i>{{ r.review }}</i></p> <br>
+    <p><i>{{ r.review }}</i></p> <br>
 {% endfor %}
-
-{% if error %}
-<p><b>{{ error }}</b></p>
-{% endif %}
 
 <br> <br> <br>
 <a href="{{ url_for('logout') }}">Log out</a>

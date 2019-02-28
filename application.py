@@ -51,7 +51,7 @@ def signup():
 
         if flag:
             db.execute("INSERT INTO USERS (username, password) VALUES (:username, :password)",
-                        { "username": request.form['username'], "password": request.form['password'] })
+                       { "username": request.form['username'], "password": request.form['password'] })
             db.commit()
             return redirect(url_for('login'))
 
@@ -68,7 +68,7 @@ def login():
             if request.form['username'] == user.username and request.form['password'] == user.password:
                 session['login_state'] = True
                 user_id = db.execute("SELECT id FROM users WHERE username=:username AND password=:password",
-                                     {"username": user.username, "password": user.password}).fetchone()
+                                     { "username": user.username, "password": user.password }).fetchone()
                 session["user_id"] = user_id
                 return redirect(url_for('index'))
 
@@ -91,7 +91,9 @@ def search():
     db.commit()
     if request.method == 'POST':
         searchInput = request.form['search']
-        searchResults = db.execute("SELECT * FROM BOOKS WHERE bsn_id LIKE '%{}%' OR author LIKE '%{}%' OR title LIKE '%{}%'".format(searchInput, searchInput, searchInput))
+        searchResults = db.execute(
+            "SELECT * FROM BOOKS WHERE bsn_id LIKE '%{}%' OR author LIKE '%{}%' OR title LIKE '%{}%'".format(
+                searchInput, searchInput, searchInput))
         db.commit()
 
         if searchResults.rowcount == 0:
@@ -103,13 +105,13 @@ def search():
     return render_template("search.html")
 
 
-@app.route("/<string:title>", methods=['POST','GET'])
+@app.route("/<string:title>", methods=['POST', 'GET'])
 def bookpage(title):
     search = db.execute("SELECT * FROM BOOKS WHERE title LIKE '%{}%'".format(title))
     db.commit()
     information = search.fetchone()
     isbn = information[0]
-    reviews = db.execute("SELECT * FROM reviews WHERE isbn=:isbn", {"isbn": isbn})
+    reviews = db.execute("SELECT * FROM reviews WHERE isbn=:isbn", { "isbn": isbn })
     user_id = session.get("user_id")[0]
     error = None
 
@@ -117,16 +119,17 @@ def bookpage(title):
         review = request.form["review"]
         rating = request.form["rating"]
 
-        if db.execute("SELECT * FROM reviews WHERE user_id=:user_id AND isbn=:isbn", {"user_id": user_id, "isbn": isbn}).rowcount > 0:
+        if db.execute("SELECT * FROM reviews WHERE user_id=:user_id AND isbn=:isbn",
+                      { "user_id": user_id, "isbn": isbn }).rowcount > 0:
             error = "You've already submitted a review!"
 
         else:
             db.execute("INSERT INTO reviews(user_id, isbn, review, rating) VALUES(:user_id, :isbn, :review, :rating)",
-                       {"user_id": user_id, "isbn": isbn, "review": review, "rating": rating})
+                       { "user_id": user_id, "isbn": isbn, "review": review, "rating": rating })
             db.commit()
 
-    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "u0l5xxurm23QrsHe5SQ",
-                                                                                    "isbns": information[0]})
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={ "key": "",
+                                                                                     "isbns": information[0] })
     response = res.json()
 
     ratings_count = response['books'][0]['work_ratings_count']

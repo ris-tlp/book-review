@@ -14,7 +14,7 @@
         <input class="btn btn-default" type="submit" value="Login">
     </form>
 
-    <a href = "{{ url_for('signup') }}" class = "button"> Signup</a>
+    <a href="{{ url_for('signup') }}" class="button"> Signup</a>
 
     {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
